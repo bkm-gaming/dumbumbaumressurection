@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DumBumBaum Ressurection</title>
+    <!-- Favicon für Browser-Tab -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Für verschiedene Geräte -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1a5f7a;
+            --secondary-blue: #57c1ff;
+            --accent-green: #2a9d8f;
+            --accent-red: #e76f51;
+            --dark-bg: #0a1929;
+            --light-text: #e6f7ff;
+            --snow-white: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #0a1929, #123d5a);
+            color: var(--light-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Schneefall-Effekt */
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .snowflake {
+            position: absolute;
+            background-color: var(--snow-white);
+            border-radius: 50%;
+            opacity: 0.8;
+            animation-name: snowfall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-10px) translateX(0); }
+            100% { transform: translateY(100vh) translateX(20px); }
+        }
+
+        /* Verbesserte Lichterkette */
+        .christmas-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .light-string {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: lightBlink 1.5s infinite;
+            box-shadow: 0 0 5px 2px currentColor;
+        }
+
+        .light:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes lightBlink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* Hauptcontainer */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(87, 193, 255, 0.7);
+            background: linear-gradient(to right, #57c1ff, #2a9d8f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 10px rgba(87, 193, 255, 0.7); }
+            to { text-shadow: 0 0 20px rgba(87, 193, 255, 0.9), 0 0 30px rgba(42, 157, 143, 0.5); }
+        }
+
+        .header-subtitle {
+            font-size: 1.3rem;
+            color: #b3e0ff;
+            margin-bottom: 30px;
+        }
+
+        /* Server-Karten */
+        .server-selection {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .server-card {
+            width: 320px;
+            background: rgba(10, 25, 41, 0.8);
+            border-radius: 15px;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 3px solid rgba(87, 193, 255, 0.4);
+            box-shadow: 0 0 20px rgba(87, 193, 255, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: rotate(30deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .server-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(87, 193, 255, 0.4);
+            border-color: rgba(87, 193, 255, 0.8);
+        }
+
+        .server-card:hover::before {
+            opacity: 1;
+            left: 50%;
+        }
+
+        .server-card.active {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 25px rgba(42, 157, 143, 0.5);
+        }
+
+        /* Logo-Stil für kompletten Kreis */
+        .server-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            border: 4px solid rgba(87, 193, 255, 0.5);
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(87, 193, 255, 0.3);
+        }
+
+        /* WICHTIG: Logo füllt jetzt den kompletten Kreis aus */
+        .server-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Geändert von 'contain' zu 'cover' für vollständige Abdeckung */
+            display: block;
+        }
+
+        /* Platzhalter-Icons sind jetzt unsichtbar */
+        .server-logo i {
+            display: none; /* Icons werden nicht mehr angezeigt */
+        }
+
+        .server-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .server-desc {
+            font-size: 1rem;
+            text-align: center;
+            color: #b3e0ff;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+
+        /* Kleinere Server-IP */
+        .server-ip-display {
+            font-size: 1rem; /* VON 1.3rem AUF 1rem VERKLEINERT */
+            font-weight: bold;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border: 2px dashed rgba(87, 193, 255, 0.5);
+            color: #57c1ff;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: all;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .server-ip-display:hover {
+            background: rgba(87, 193, 255, 0.15);
+            border-color: rgba(87, 193, 255, 0.8);
+            transform: scale(1.02);
+        }
+
+        .ip-label {
+            font-size: 0.9rem;
+            color: #b3e0ff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(42, 157, 143, 0.9);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Anleitungstabs */
+        .guide-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(87, 193, 255, 0.3);
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            color: #b3e0ff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            margin-right: 5px;
+        }
+
+        .tab-btn.active {
+            color: #57c1ff;
+            font-weight: bold;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #57c1ff;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(87, 193, 255, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Anleitung */
+        .guide-section {
+            background: rgba(10, 25, 41, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 2px solid rgba(87, 193, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .guide-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(87, 193, 255, 0.2);
+        }
+
+        .guide-step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            background: linear-gradient(to bottom right, #57c1ff, #2a9d8f);
+            color: #0a1929;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #b3e0ff;
+        }
+
+        .step-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #cce7ff;
+            margin-bottom: 15px;
+        }
+
+        .step-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 2px solid rgba(87, 193, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Discord Button */
+        .discord-section {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(to right, #5865F2, #7289DA);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(88, 101, 242, 0.6);
+            background: linear-gradient(to right, #7289DA, #5865F2);
+        }
+
+        .discord-btn i {
+            font-size: 2rem;
+        }
+
+        /* Entferne die alten Icon-Platzhalter */
+        .custom-icons {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(87, 193, 255, 0.2);
+            color: #b3e0ff;
+            font-size: 1rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #57c1ff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+            
+            .server-selection {
+                gap: 30px;
+            }
+            
+            .server-card {
+                width: 280px;
+            }
+            
+            .server-logo {
+                width: 130px;
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .header-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .server-selection {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+            
+            .server-card {
+                width: 100%;
+                max-width: 400px;
+                padding: 25px 20px;
+            }
+            
+            .server-logo {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 20px;
+            }
+            
+            .guide-step {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .guide-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                flex: 1;
+                min-width: 140px;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .server-ip-display {
+                font-size: 0.95rem;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header-title {
+                font-size: 1.8rem;
+            }
+            
+            .server-name {
+                font-size: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .discord-btn {
+                font-size: 1.2rem;
+                padding: 15px 30px;
+            }
+            
+            .server-card {
+                padding: 20px 15px;
+            }
+            
+            .server-logo {
+                width: 110px;
+                height: 110px;
+                margin-bottom: 15px;
+            }
+            
+            .server-ip-display {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Schneefall-Effekt -->
+    <div class="snow-container" id="snow-container"></div>
+    
+    <!-- Lichterkette -->
+    <div class="christmas-lights">
+        <div class="light-string">
+            <div class="light" style="color: #ff0000;"></div>
+            <div class="light" style="color: #ff9900;"></div>
+            <div class="light" style="color: #ffff00;"></div>
+            <div class="light" style="color: #00ff00;"></div>
+            <div class="light" style="color: #0099ff;"></div>
+            <div class="light" style="color: #6600ff;"></div>
+            <div class="light" style="color: #ff00ff;"></div>
+            <div class="light" style="color: #ffffff;"></div>
+        </div>
+    </div>
+
+    <!-- Kopier-Benachrichtigung -->
+    <div class="copy-notification" id="copy-notification">IP-Adresse kopiert!</div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1 class="header-title">DumBumBaum Ressurection</h1>
+            <p class="header-subtitle">Willkommen auf unseren Minecraft Servern - DBBR & DumBumBaum 1 Reborn</p>
+        </header>
+
+        <!-- Server Auswahl - NEUES LAYOUT -->
+        <div class="server-selection">
+            <div class="server-card active" id="dbrr-card">
+                <!-- DBBR Logo (über der IP) -->
+                <div class="server-logo">
+                    <!-- DEIN DBBR LOGO HIER EINFÜGEN: -->
+                    <img src="images/dbbr-logo.png" alt="DBBR Logo">
+                    <i class="fas fa-tree"></i> <!-- Platzhalter -->
+                </div>
+                
+                <div class="server-name">DBBR</div>
+                <div class="server-desc">DumBumBaum kommt nach langem zurück!</div>
+                
+                <!-- IP unter dem Logo -->
+                <div class="ip-label">Server IP:</div>
+                <div class="server-ip-display" id="dbrr-ip">xx.12.2025 :)</div>
+            </div>
+            
+            <div class="server-card" id="dbb1-card">
+                <!-- DBB 1 Reborn Logo (über der IP) -->
+                <div class="server-logo">
+                    <!-- DEIN DBB 1 REBORN LOGO HIER EINFÜGEN: -->
+                    <img src="images/dbb1-logo.png" alt="DumBumBaum 1 Reborn Logo">
+                    <i class="fas fa-mountain"></i> <!-- Platzhalter -->
+                </div>
+                
+                <div class="server-name">DumBumBaum 1 Reborn</div>
+                <div class="server-desc">DBB1 Auf Neuster Version 1.21.11 Port: 20196</div>
+                
+                <!-- IP unter dem Logo -->
+                <div class="ip-label">Server IP:</div>
+                <div class="server-ip-display" id="dbb1-ip">DumBumBaum.aternos.me</div>
+            </div>
+        </div>
+
+        <!-- Anleitungstabs -->
+        <div class="guide-tabs">
+            <button class="tab-btn active" data-tab="java">Java Edition Anleitung</button>
+            <button class="tab-btn" data-tab="bedrock">Bedrock Edition Anleitung</button>
+        </div>
+
+        <!-- Java Edition Anleitung -->
+        <section class="guide-section tab-content active" id="java-tab">
+            <h2 class="section-title"><i class="fab fa-java"></i> Minecraft Java Edition - Schritt für Schritt</h2>
+            
+            <div class="guide-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Minecraft Java Edition öffnen</h3>
+                    <p>Starte Minecraft Java Edition auf deinem PC. Stelle sicher, dass du die Version 1.9 oder neuer installiert hast, da unsere Server mit diesen Versionen kompatibel sind.</p>
+                    <div style="background: rgba(87, 193, 255, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px;">
+                        <p><i class="fas fa-lightbulb"></i> Tipp: Du kannst die Version im Minecraft Launcher unter "Installations" auswählen oder eine neue Installation erstellen.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Zum Multiplayer-Menü navigieren</h3>
+                    <p>Klicke im Hauptmenü auf "Multiplayer" und dann auf "Server hinzufügen". Hier kannst du die Serverdetails eingeben.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Serverinformationen eingeben</h3>
+                    <p>Gib einen Namen für den Server ein (z.B. "DBBR") und trage die Serveradresse ein. Klicke auf den Server oben, um die IP automatisch zu übernehmen: <strong id="java-guide-ip">-----:)</strong></p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Server beitreten</h3>
+                    <p>Klicke auf "Fertig" und dann auf den neu erstellten Server in deiner Liste. Drücke "Server beitreten" und du wirst mit unserer Welt verbunden.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Erste Schritte auf dem Server</h3>
+                    <p>Nach dem Beitreten erscheinst du am Spawnpunkt. Folge den Hinweisschildern, um die Regeln zu lesen und das Starter-Kit zu erhalten. Viel Spaß beim Spielen!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bedrock Edition Anleitung -->
+        <section class="guide-section tab-content" id="bedrock-tab">
+            <h2 class="section-title"><i class="fas fa-mobile-alt"></i> Minecraft Bedrock Edition - Schritt für Schritt</h2>
+            
+            <div class="guide-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Minecraft Bedrock öffnen</h3>
+                    <p>Starte Minecraft auf deinem Gerät (Windows 10/11, Xbox, PlayStation, Switch, Mobile). Stelle sicher, dass du die neueste Version installiert hast.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Zum Servers Tab navigieren</h3>
+                    <p>Gehe zum "Play" Menü und wähle dann den Tab "Servers" aus. Scrolle nach unten zu "Server hinzufügen".</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Serverinformationen eingeben</h3>
+                    <p>Gib einen Servernamen ein (z.B. "DumBumBaum 1 Reborn") und trage die Serveradresse ein. Klicke auf den Server oben, um die IP automatisch zu übernehmen: <strong id="bedrock-guide-ip">DumBumBaum.aternos.me</strong></p>
+                    <p>Port: 20196 (für DumBumBaum 1 Reborn)</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Server speichern und beitreten</h3>
+                    <p>Klicke auf "Speichern" und dann auf den Server in deiner Liste. Wähle "Server beitreten" aus, um die Verbindung herzustellen.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Erste Schritte auf dem Server</h3>
+                    <p>Nach erfolgreicher Verbindung erscheinst du am Bedrock-Spawnpunkt. Hier findest du alle wichtigen Informationen und dein Starter-Kit.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discord Button -->
+        <div class="discord-section">
+            <a href="https://discord.gg/uMpF9RDzAj" id="discord-link" class="discord-btn" target="_blank">
+                <i class="fab fa-discord"></i> Trete unserem Discord bei!
+            </a>
+            <p style="margin-top: 15px; font-size: 1.1rem;">Für Fragen, Hilfe, Events, Infos und die Community</p>
+        </div>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-logo">DumBumBaum Ressurection</div>
+            <p>© 2025 DumBumBaum Ressurection. Alle Rechte vorbehalten.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Schneefall-Effekt generieren
+        function createSnowflakes() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflakeCount = 80;
+            
+            snowContainer.innerHTML = '';
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                const size = Math.random() * 6 + 3;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                
+                const duration = Math.random() * 12 + 8;
+                snowflake.style.animationDuration = `${duration}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                snowContainer.appendChild(snowflake);
+            }
+        }
+        
+        // Server-IPs laden
+        function loadServerIPs() {
+            const savedDBRRIP = localStorage.getItem('dbrrIP') || 'xx.12.2025 :)';
+            document.getElementById('dbrr-ip').textContent = savedDBRRIP;
+            document.getElementById('java-guide-ip').textContent = savedDBRRIP;
+            
+            const savedDBB1IP = localStorage.getItem('dbb1IP') || 'DumBumBaum.aternos.me';
+            document.getElementById('dbb1-ip').textContent = savedDBB1IP;
+            document.getElementById('bedrock-guide-ip').textContent = savedDBB1IP;
+        }
+        
+        // IP kopieren Funktion
+        function copyToClipboard(text, serverName) {
+            navigator.clipboard.writeText(text).then(() => {
+                const notification = document.getElementById('copy-notification');
+                notification.textContent = `${serverName} IP-Adresse kopiert: ${text}`;
+                notification.style.opacity = '1';
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                }, 3000);
+            }).catch(err => {
+                console.error('Fehler beim Kopieren: ', err);
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const notification = document.getElementById('copy-notification');
+                notification.textContent = `${serverName} IP-Adresse kopiert!`;
+                notification.style.opacity = '1';
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                }, 3000);
+            });
+        }
+        
+        // Serverauswahl Funktion
+        function setupServerSelection() {
+            const dbrrCard = document.getElementById('dbrr-card');
+            const dbb1Card = document.getElementById('dbb1-card');
+            const dbrrIP = document.getElementById('dbrr-ip');
+            const dbb1IP = document.getElementById('dbb1-ip');
+            
+            dbrrCard.addEventListener('click', function() {
+                dbrrCard.classList.add('active');
+                dbb1Card.classList.remove('active');
+                copyToClipboard(dbrrIP.textContent, 'DBBR');
+            });
+            
+            dbb1Card.addEventListener('click', function() {
+                dbb1Card.classList.add('active');
+                dbrrCard.classList.remove('active');
+                copyToClipboard(dbb1IP.textContent, 'DumBumBaum 1 Reborn');
+            });
+            
+            dbrrIP.addEventListener('click', function(e) {
+                e.stopPropagation();
+                copyToClipboard(dbrrIP.textContent, 'DBBR');
+            });
+            
+            dbb1IP.addEventListener('click', function(e) {
+                e.stopPropagation();
+                copyToClipboard(dbb1IP.textContent, 'DumBumBaum 1 Reborn');
+            });
+        }
+        
+        // Tab-System für Anleitungen
+        function setupTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+        
+        // Discord-Link anpassbar machen
+        function setupDiscordLink() {
+            const discordBtn = document.getElementById('discord-link');
+            const savedDiscordLink = localStorage.getItem('discordLink');
+            if (savedDiscordLink) {
+                discordBtn.href = savedDiscordLink;
+            }
+        }
+        
+        // Event Listener einrichten
+        document.addEventListener('DOMContentLoaded', function() {
+            createSnowflakes();
+            loadServerIPs();
+            setupServerSelection();
+            setupTabs();
+            setupDiscordLink();
+            
+            setInterval(() => {
+                const snowflakes = document.querySelectorAll('.snowflake');
+                snowflakes.forEach(flake => {
+                    if (Math.random() > 0.7) {
+                        flake.style.animationDuration = `${Math.random() * 12 + 8}s`;
+                    }
+                });
+            }, 30000);
+        });
+        
+        window.addEventListener('resize', function() {
+            if (window.innerWidth < 768) {
+                document.querySelectorAll('.snowflake').forEach((flake, index) => {
+                    if (index > 50) flake.style.display = 'none';
+                });
+            } else {
+                document.querySelectorAll('.snowflake').forEach(flake => {
+                    flake.style.display = 'block';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
