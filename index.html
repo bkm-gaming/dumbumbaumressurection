@@ -599,7 +599,8 @@
         <!-- Header -->
         <header>
             <h1 class="header-title">DumBumBaum Ressurection</h1>
-            <p class="header-subtitle">Willkommen auf unseren Minecraft Servern - DumBumBaum Ressurection & DumBumBaum 1 Reborn</p>
+            <p class="header-subtitle">Willkommen auf unseren Minecraft Servern - DumBumBaum Ressurection & DumBumBaum 1 Reborn.</p>
+            <p class="header-subtitle">Um Spielen zu können musst du dich erstmal auf unserem Discord Server Whitelisten lassen!</p>
         </header>
 
         <!-- Server Auswahl - NEUES LAYOUT -->
@@ -613,7 +614,9 @@
                 </div>
                 
                 <div class="server-name">DumBumBaum Ressurection</div>
-                <div class="server-desc">DumBumBaum kommt nach langem zurück!</div>
+                <div class="server-desc">DumBumBaum kommt nach langem zurück!
+                    Port: -
+                </div>
                 
                 <!-- IP unter dem Logo -->
                 <div class="ip-label">Server IP:</div>
@@ -670,7 +673,7 @@
                 <div class="step-number">3</div>
                 <div class="step-content">
                     <h3>Serverinformationen eingeben</h3>
-                    <p>Gib einen Namen für den Server ein (z.B. "DBBR") und trage die Serveradresse ein. Klicke auf den Server oben, um die IP automatisch zu übernehmen: <strong id="java-guide-ip">-----:)</strong></p>
+                    <p>Gib einen Namen für den Server ein (z.B. "DBBR") und trage die Serveradresse ein. Klicke auf den oben auf einer der gewünschten Adressen um sie zu kopieren.
                 </div>
             </div>
             
@@ -715,7 +718,7 @@
                 <div class="step-number">3</div>
                 <div class="step-content">
                     <h3>Serverinformationen eingeben</h3>
-                    <p>Gib einen Servernamen ein (z.B. "DumBumBaum 1 Reborn") und trage die Serveradresse ein. Klicke auf den Server oben, um die IP automatisch zu übernehmen: <strong id="bedrock-guide-ip">DumBumBaum.aternos.me</strong></p>
+                    <p>Gib einen Servernamen ein (z.B. "DumBumBaum 1 Reborn") und trage die Serveradresse ein. Klicke auf den oben auf einer der gewünschten Adressen um sie zu kopieren.
                     <p>Port: 20196 (für DumBumBaum 1 Reborn)</p>
                 </div>
             </div>
@@ -780,7 +783,7 @@
         
         // Server-IPs laden
         function loadServerIPs() {
-            const savedDBRRIP = localStorage.getItem('dbrrIP') || 'xx.12.2025 :)';
+            const savedDBRRIP = localStorage.getItem('dbrrIP') || '-';
             document.getElementById('dbrr-ip').textContent = savedDBRRIP;
             document.getElementById('java-guide-ip').textContent = savedDBRRIP;
             
