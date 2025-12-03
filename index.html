@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DumBumBaum Ressurection</title>
+    <title>DumBumBaum Resurrection</title>
     <!-- Favicon für Browser-Tab -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Für verschiedene Geräte -->
@@ -286,6 +286,40 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
+        /* Shop Coming Soon Nachricht */
+        .shop-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 25, 41, 0.95);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(87, 193, 255, 0.5);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .shop-notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .shop-notification i {
+            font-size: 3rem;
+            color: #57c1ff;
+            margin-bottom: 20px;
+            display: block;
+        }
+
         /* Anleitungstabs */
         .guide-tabs {
             display: flex;
@@ -405,12 +439,24 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* Discord Button */
-        .discord-section {
+        /* Buttons Bereich */
+        .buttons-section {
             text-align: center;
             margin: 50px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
         }
 
+        .button-row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Discord Button */
         .discord-btn {
             display: inline-flex;
             align-items: center;
@@ -425,8 +471,8 @@
             text-decoration: none;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
-            border: none;
             cursor: pointer;
+            border: none;
         }
 
         .discord-btn:hover {
@@ -435,13 +481,34 @@
             background: linear-gradient(to right, #7289DA, #5865F2);
         }
 
-        .discord-btn i {
-            font-size: 2rem;
+        /* Shop Button */
+        .shop-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e53);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            cursor: pointer;
+            border: none;
         }
 
-        /* Entferne die alten Icon-Platzhalter */
-        .custom-icons {
-            display: none;
+        .shop-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.6);
+            background: linear-gradient(to right, #ff8e53, #ff6b6b);
+        }
+
+        .discord-btn i,
+        .shop-btn i {
+            font-size: 2rem;
         }
 
         /* Footer */
@@ -534,6 +601,24 @@
                 font-size: 0.95rem;
                 padding: 8px 12px;
             }
+            
+            .button-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .discord-btn,
+            .shop-btn {
+                width: 100%;
+                max-width: 300px;
+                padding: 15px 30px;
+                font-size: 1.3rem;
+            }
+            
+            .shop-notification {
+                font-size: 1.8rem;
+                padding: 30px 40px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -553,7 +638,8 @@
                 font-size: 1.5rem;
             }
             
-            .discord-btn {
+            .discord-btn,
+            .shop-btn {
                 font-size: 1.2rem;
                 padding: 15px 30px;
             }
@@ -590,6 +676,12 @@
             <div class="light" style="color: #ff00ff;"></div>
             <div class="light" style="color: #ffffff;"></div>
         </div>
+    </div>
+
+    <!-- Shop Coming Soon Nachricht (versteckt) -->
+    <div class="shop-notification" id="shop-notification">
+        <i class="fas fa-clock"></i>
+        Coming soon...
     </div>
 
     <!-- Kopier-Benachrichtigung -->
@@ -739,11 +831,19 @@
             </div>
         </section>
 
-        <!-- Discord Button -->
-        <div class="discord-section">
-            <a href="https://discord.gg/uMpF9RDzAj" id="discord-link" class="discord-btn" target="_blank">
-                <i class="fab fa-discord"></i> Trete unserem Discord bei!
-            </a>
+        <!-- Buttons Bereich (Discord + Shop) -->
+        <div class="buttons-section">
+            <div class="button-row">
+                <!-- Discord Button -->
+                <a href="https://discord.gg/uMpF9RDzAj" id="discord-link" class="discord-btn" target="_blank">
+                    <i class="fab fa-discord"></i> Trete unserem Discord bei!
+                </a>
+                
+                <!-- NEU: Shop Button -->
+                <button id="shop-btn" class="shop-btn">
+                    <i class="fas fa-shopping-cart"></i> Shop
+                </button>
+            </div>
             <p style="margin-top: 15px; font-size: 1.1rem;">Für Fragen, Hilfe, Events, Infos und die Community</p>
         </div>
         
@@ -820,6 +920,22 @@
             });
         }
         
+        // Shop Coming Soon Funktion
+        function setupShopButton() {
+            const shopBtn = document.getElementById('shop-btn');
+            const shopNotification = document.getElementById('shop-notification');
+            
+            shopBtn.addEventListener('click', function() {
+                // Zeige die "Coming soon" Nachricht
+                shopNotification.classList.add('show');
+                
+                // Verstecke die Nachricht nach 2 Sekunden
+                setTimeout(() => {
+                    shopNotification.classList.remove('show');
+                }, 2000);
+            });
+        }
+        
         // Serverauswahl Funktion
         function setupServerSelection() {
             const dbrrCard = document.getElementById('dbrr-card');
@@ -867,22 +983,13 @@
             });
         }
         
-        // Discord-Link anpassbar machen
-        function setupDiscordLink() {
-            const discordBtn = document.getElementById('discord-link');
-            const savedDiscordLink = localStorage.getItem('discordLink');
-            if (savedDiscordLink) {
-                discordBtn.href = savedDiscordLink;
-            }
-        }
-        
         // Event Listener einrichten
         document.addEventListener('DOMContentLoaded', function() {
             createSnowflakes();
             loadServerIPs();
             setupServerSelection();
             setupTabs();
-            setupDiscordLink();
+            setupShopButton();
             
             setInterval(() => {
                 const snowflakes = document.querySelectorAll('.snowflake');
