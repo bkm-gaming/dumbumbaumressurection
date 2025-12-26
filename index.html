@@ -213,13 +213,13 @@
         .server-logo img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Geändert von 'contain' zu 'cover' für vollständige Abdeckung */
+            object-fit: cover;
             display: block;
         }
 
         /* Platzhalter-Icons sind jetzt unsichtbar */
         .server-logo i {
-            display: none; /* Icons werden nicht mehr angezeigt */
+            display: none;
         }
 
         .server-name {
@@ -240,7 +240,7 @@
 
         /* Kleinere Server-IP */
         .server-ip-display {
-            font-size: 1rem; /* VON 1.3rem AUF 1rem VERKLEINERT */
+            font-size: 1rem;
             font-weight: bold;
             padding: 10px 15px;
             background: rgba(0, 0, 0, 0.4);
@@ -286,38 +286,135 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* Shop Coming Soon Nachricht */
-        .shop-notification {
+        /* Modal-Fenster (Shop & Events) */
+        .modal-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 25, 41, 0.95);
-            color: white;
-            padding: 40px 60px;
-            border-radius: 20px;
-            font-size: 2.5rem;
-            font-weight: bold;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transition: all 0.5s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 3px solid rgba(87, 193, 255, 0.5);
-            text-align: center;
-            max-width: 80%;
         }
 
-        .shop-notification.show {
+        .modal-overlay.active {
             opacity: 1;
             visibility: visible;
         }
 
-        .shop-notification i {
-            font-size: 3rem;
+        .modal-content {
+            background: linear-gradient(to bottom, #0a1929, #123d5a);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 1000px; /* Vergrößert für mehr Platz */
+            width: 90%;
+            max-height: 85vh; /* Höher für bessere Sicht */
+            overflow-y: auto;
+            border: 3px solid rgba(87, 193, 255, 0.5);
+            box-shadow: 0 0 30px rgba(87, 193, 255, 0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
             color: #57c1ff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #57c1ff;
+            text-shadow: 0 0 10px rgba(87, 193, 255, 0.5);
+        }
+
+        /* Shop Items */
+        .shop-items, .event-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Breitere Items */
+            gap: 30px; /* Mehr Abstand */
+            margin-top: 20px;
+        }
+
+        .shop-item, .event-item {
+            background: rgba(10, 25, 41, 0.8);
+            border-radius: 15px;
+            padding: 25px; /* Mehr Padding */
+            border: 2px solid rgba(87, 193, 255, 0.3);
+            transition: all 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px; /* Feste Höhe für Konsistenz */
+        }
+
+        .shop-item:hover, .event-item:hover {
+            transform: translateY(-5px);
+            border-color: #57c1ff;
+            box-shadow: 0 10px 20px rgba(87, 193, 255, 0.2);
+        }
+
+        /* Größere Bilder für Spawner */
+        .item-image {
+            width: 100%;
+            height: 220px; /* Höher für größere Bilder */
+            object-fit: contain; /* Statt cover, damit das ganze Bild sichtbar ist */
+            border-radius: 10px;
             margin-bottom: 20px;
-            display: block;
+            border: 2px solid rgba(87, 193, 255, 0.3);
+            background-color: rgba(0, 0, 0, 0.2); /* Hintergrund für bessere Sichtbarkeit */
+            padding: 10px; /* Platz um das Bild */
+        }
+
+        .item-name {
+            font-size: 1.6rem; /* Etwas größer */
+            color: #ffffff;
+            margin-bottom: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-price {
+            font-size: 1.4rem; /* Etwas größer */
+            color: #2a9d8f;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .item-description {
+            color: #b3e0ff;
+            font-size: 1.1rem; /* Etwas größer */
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        /* Event Item spezifisch */
+        .event-date {
+            font-size: 1.3rem;
+            color: #ff8e53;
+            font-weight: bold;
+            margin: 10px 0;
         }
 
         /* Anleitungstabs */
@@ -506,9 +603,58 @@
             background: linear-gradient(to right, #ff8e53, #ff6b6b);
         }
 
+        /* Event Button */
+        .event-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(to right, #2a9d8f, #4cc9b0);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(42, 157, 143, 0.4);
+            cursor: pointer;
+            border: none;
+        }
+
+        .event-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(42, 157, 143, 0.6);
+            background: linear-gradient(to right, #4cc9b0, #2a9d8f);
+        }
+
         .discord-btn i,
-        .shop-btn i {
+        .shop-btn i,
+        .event-btn i {
             font-size: 2rem;
+        }
+
+        /* Season Info */
+        .season-info {
+            background: linear-gradient(to right, rgba(255, 107, 107, 0.1), rgba(255, 142, 83, 0.1));
+            border: 2px solid rgba(255, 142, 83, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .season-info h3 {
+            color: #ff8e53;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .season-info p {
+            color: #ffcc99;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
 
         /* Footer */
@@ -529,6 +675,16 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1200px) {
+            .modal-content {
+                max-width: 90%;
+            }
+            
+            .shop-items, .event-items {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
         @media (max-width: 992px) {
             .header-title {
                 font-size: 2.5rem;
@@ -545,6 +701,18 @@
             .server-logo {
                 width: 130px;
                 height: 130px;
+            }
+            
+            .modal-content {
+                padding: 25px;
+            }
+            
+            .shop-items, .event-items {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .item-image {
+                height: 200px;
             }
         }
 
@@ -608,16 +776,28 @@
             }
             
             .discord-btn,
-            .shop-btn {
+            .shop-btn,
+            .event-btn {
                 width: 100%;
                 max-width: 300px;
                 padding: 15px 30px;
                 font-size: 1.3rem;
             }
             
-            .shop-notification {
-                font-size: 1.8rem;
-                padding: 30px 40px;
+            .modal-title {
+                font-size: 2rem;
+            }
+            
+            .shop-items, .event-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .shop-item, .event-item {
+                min-height: 380px;
+            }
+            
+            .item-image {
+                height: 180px;
             }
         }
 
@@ -639,7 +819,8 @@
             }
             
             .discord-btn,
-            .shop-btn {
+            .shop-btn,
+            .event-btn {
                 font-size: 1.2rem;
                 padding: 15px 30px;
             }
@@ -656,6 +837,33 @@
             
             .server-ip-display {
                 font-size: 0.9rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .shop-item, .event-item {
+                min-height: 350px;
+                padding: 20px;
+            }
+            
+            .item-image {
+                height: 160px;
+            }
+            
+            .item-name {
+                font-size: 1.4rem;
+                min-height: 50px;
+            }
+            
+            .item-price {
+                font-size: 1.2rem;
+            }
+            
+            .item-description {
+                font-size: 1rem;
             }
         }
     </style>
@@ -678,10 +886,55 @@
         </div>
     </div>
 
-    <!-- Shop Coming Soon Nachricht (versteckt) -->
-    <div class="shop-notification" id="shop-notification">
-        <i class="fas fa-clock"></i>
-        Coming soon...
+    <!-- Shop Modal -->
+    <div class="modal-overlay" id="shop-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2 class="modal-title">Spawner Shop</h2>
+            <div class="shop-items">
+                <!-- Spawner Items - du kannst die Bilder später hinzufügen -->
+                <div class="shop-item">
+                    <img src="images/zombie.png" alt="Zombie Spawner" class="item-image">
+                    <h3 class="item-name">Zombie Spawner</h3>
+                    <p class="item-price">-</p>
+                    <p class="item-description">Zombies für XP und Verotetes Fleisch.</p>
+                </div>
+                <div class="shop-item">
+                    <img src="images/skelett.png" alt="Skelett Spawner" class="item-image">
+                    <h3 class="item-name">Skelett Spawner</h3>
+                    <p class="item-price">-</p>
+                    <p class="item-description">Perfekt für Pfeile und Knochen.</p>
+                </div>
+                <div class="shop-item">
+                    <img src="images/blaze.png" alt="Blaze Spawner" class="item-image">
+                    <h3 class="item-name">Blaze Spawner</h3>
+                    <p class="item-price">-</p>
+                    <p class="item-description">Für Blaze Rods.</p>
+                </div>
+                <div class="shop-item">
+                    <img src="images/spider.png" alt="Spider Spawner" class="item-image">
+                    <h3 class="item-name">Spider Spawner</h3>
+                    <p class="item-price">-</p>
+                    <p class="item-description">Für String und Spinnen Augen.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Modal -->
+    <div class="modal-overlay" id="event-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2 class="modal-title">Events</h2>
+            <div class="event-items">
+                <!-- Event Items -->
+                <div class="event-item">
+                    <h3 class="item-name">DBB Season 6 Start</h3>
+                    <p class="event-date">Anfang nächstes Jahr</p>
+                    <p class="item-description">Die neue Season von DumBumBaum startet mit vielen neuen Features, einer frischen Welt und spannenden Events. Sei dabei, wenn alles neu beginnt!</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Kopier-Benachrichtigung -->
@@ -691,43 +944,26 @@
         <!-- Header -->
         <header>
             <h1 class="header-title">DumBumBaum Ressurection</h1>
-            <p class="header-subtitle">Willkommen auf unseren Minecraft Servern - DBBR & DumBumBaum 1 Reborn.</p>
+            <p class="header-subtitle">Willkommen auf unserem Minecraft Server DumBumBaum Resurrection.</p>
             <p class="header-subtitle">Um Spielen zu können musst du dich erstmal auf unserem Discord Server Whitelisten lassen!</p>
             <p class="header-subtitle">Minecraft Server mit Season für RP/Clans/SMP und PVP.</p>
         </header>
 
-        <!-- Server Auswahl - NEUES LAYOUT -->
+        <!-- Server Auswahl -->
         <div class="server-selection">
             <div class="server-card active" id="dbrr-card">
-                <!-- DBBR Logo (über der IP) -->
+                <!-- DBBR Logo -->
                 <div class="server-logo">
-                    <!-- DEIN DBBR LOGO HIER EINFÜGEN: -->
                     <img src="images/dbbr-logo.png" alt="DBBR Logo">
-                    <i class="fas fa-tree"></i> <!-- Platzhalter -->
+                    <i class="fas fa-tree"></i>
                 </div>
                 
                 <div class="server-name">DBBR</div>
-                <div class="server-desc">DumBumBaum kommt nach langem zurück mit neuer Season! Port: -</div>
+                <div class="server-desc">DumBumBaum kommt nach langem zurück mit neuer Season!</div>
                 
                 <!-- IP unter dem Logo -->
                 <div class="ip-label">Server IP:</div>
                 <div class="server-ip-display" id="dbrr-ip">-</div>
-            </div>
-            
-            <div class="server-card" id="dbb1-card">
-                <!-- DBB 1 Reborn Logo (über der IP) -->
-                <div class="server-logo">
-                    <!-- DEIN DBB 1 REBORN LOGO HIER EINFÜGEN: -->
-                    <img src="images/dbb1-logo.png" alt="DumBumBaum 1 Reborn Logo">
-                    <i class="fas fa-mountain"></i> <!-- Platzhalter -->
-                </div>
-                
-                <div class="server-name">DumBumBaum 1 Reborn</div>
-                <div class="server-desc">DBB1 Auf Neuster Version 1.21.11 Port: 20196</div>
-                
-                <!-- IP unter dem Logo -->
-                <div class="ip-label">Server IP:</div>
-                <div class="server-ip-display" id="dbb1-ip">DumBumBaum.aternos.me</div>
             </div>
         </div>
 
@@ -809,8 +1045,8 @@
                 <div class="step-number">3</div>
                 <div class="step-content">
                     <h3>Serverinformationen eingeben</h3>
-                    <p>Gib einen Servernamen ein (z.B. "DumBumBaum 1 Reborn") und trage die Serveradresse ein. Klicke oben auf die gewünschte Adresse um sie zu Kopieren. z.b. <strong id="bedrock-guide-ip"></strong></p>
-                    <p>Port: 20196 (für DumBumBaum 1 Reborn)</p>
+                    <p>Gib einen Servernamen ein (z.B. "DBBR") und trage die Serveradresse ein. Klicke oben auf die gewünschte Adresse um sie zu Kopieren. z.b. <strong id="bedrock-guide-ip">-----</strong></p>
+                    <p>Port: 25565 (Standard-Port für Minecraft)</p>
                 </div>
             </div>
             
@@ -831,7 +1067,7 @@
             </div>
         </section>
 
-        <!-- Buttons Bereich (Discord + Shop) -->
+        <!-- Buttons Bereich (Discord + Events + Shop) -->
         <div class="buttons-section">
             <div class="button-row">
                 <!-- Discord Button -->
@@ -839,12 +1075,24 @@
                     <i class="fab fa-discord"></i> Trete unserem Discord bei!
                 </a>
                 
-                <!-- NEU: Shop Button -->
+                <!-- NEU: Event Button (grün) -->
+                <button id="event-btn" class="event-btn">
+                    <i class="fas fa-calendar-alt"></i> Events
+                </button>
+                
+                <!-- Shop Button -->
                 <button id="shop-btn" class="shop-btn">
                     <i class="fas fa-shopping-cart"></i> Shop
                 </button>
             </div>
-            <p style="margin-top: 15px; font-size: 1.1rem;">Für Fragen, Hilfe, Events, Infos und die Community</p>
+            
+            <!-- Season Info neben dem Shop Button -->
+            <div class="season-info">
+                <h3><i class="fas fa-calendar-star"></i> Wichtige Info</h3>
+                <p>DumBumBaum Season 6 Start anfang nächsten Jahres!</p>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 1.1rem;">Für Fragen, Hilfe, Events, Infos und die Community schau auf unserem Discord Server vorbei!</p>
         </div>
         
         <!-- Footer -->
@@ -885,10 +1133,7 @@
             const savedDBRRIP = localStorage.getItem('dbrrIP') || '-';
             document.getElementById('dbrr-ip').textContent = savedDBRRIP;
             document.getElementById('java-guide-ip').textContent = savedDBRRIP;
-            
-            const savedDBB1IP = localStorage.getItem('dbb1IP') || 'DumBumBaum.aternos.me';
-            document.getElementById('dbb1-ip').textContent = savedDBB1IP;
-            document.getElementById('bedrock-guide-ip').textContent = savedDBB1IP;
+            document.getElementById('bedrock-guide-ip').textContent = savedDBRRIP;
         }
         
         // IP kopieren Funktion
@@ -920,49 +1165,62 @@
             });
         }
         
-        // Shop Coming Soon Funktion
-        function setupShopButton() {
+        // Modal Funktionen
+        function setupModals() {
+            const shopModal = document.getElementById('shop-modal');
+            const eventModal = document.getElementById('event-modal');
             const shopBtn = document.getElementById('shop-btn');
-            const shopNotification = document.getElementById('shop-notification');
+            const eventBtn = document.getElementById('event-btn');
+            const closeButtons = document.querySelectorAll('.modal-close');
             
+            // Shop Modal öffnen
             shopBtn.addEventListener('click', function() {
-                // Zeige die "Coming soon" Nachricht
-                shopNotification.classList.add('show');
-                
-                // Verstecke die Nachricht nach 2 Sekunden
-                setTimeout(() => {
-                    shopNotification.classList.remove('show');
-                }, 2000);
+                shopModal.classList.add('active');
+            });
+            
+            // Event Modal öffnen
+            eventBtn.addEventListener('click', function() {
+                eventModal.classList.add('active');
+            });
+            
+            // Modal schließen
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    shopModal.classList.remove('active');
+                    eventModal.classList.remove('active');
+                });
+            });
+            
+            // Modal schließen bei Klick außerhalb
+            [shopModal, eventModal].forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Modal schließen mit Escape-Taste
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    shopModal.classList.remove('active');
+                    eventModal.classList.remove('active');
+                }
             });
         }
         
         // Serverauswahl Funktion
         function setupServerSelection() {
             const dbrrCard = document.getElementById('dbrr-card');
-            const dbb1Card = document.getElementById('dbb1-card');
             const dbrrIP = document.getElementById('dbrr-ip');
-            const dbb1IP = document.getElementById('dbb1-ip');
             
             dbrrCard.addEventListener('click', function() {
-                dbrrCard.classList.add('active');
-                dbb1Card.classList.remove('active');
                 copyToClipboard(dbrrIP.textContent, 'DBBR');
-            });
-            
-            dbb1Card.addEventListener('click', function() {
-                dbb1Card.classList.add('active');
-                dbrrCard.classList.remove('active');
-                copyToClipboard(dbb1IP.textContent, 'DumBumBaum 1 Reborn');
             });
             
             dbrrIP.addEventListener('click', function(e) {
                 e.stopPropagation();
                 copyToClipboard(dbrrIP.textContent, 'DBBR');
-            });
-            
-            dbb1IP.addEventListener('click', function(e) {
-                e.stopPropagation();
-                copyToClipboard(dbb1IP.textContent, 'DumBumBaum 1 Reborn');
             });
         }
         
@@ -989,7 +1247,7 @@
             loadServerIPs();
             setupServerSelection();
             setupTabs();
-            setupShopButton();
+            setupModals();
             
             setInterval(() => {
                 const snowflakes = document.querySelectorAll('.snowflake');
